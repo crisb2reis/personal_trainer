@@ -77,7 +77,7 @@ export default function Home() {
                 <div className="absolute -top-20 -right-20 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
                 <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/5]">
                   <Image 
-                    src="/hero.png" 
+                    src="/personal_trainer/hero.png" 
                     alt="Personal Trainer Masculino" 
                     fill 
                     className="object-cover"
@@ -95,7 +95,7 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="order-2 lg:order-1 relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
                 <Image 
-                  src="/about.png" 
+                  src="/personal_trainer/about.png" 
                   alt="Sobre o Personal Trainer" 
                   fill 
                     className="object-cover"
