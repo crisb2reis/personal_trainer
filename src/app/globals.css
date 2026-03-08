@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #FF6600;
+  --color-background-light: #f8f8f5;
+  --color-background-dark: #1e230f;
+  --font-display: "Lexend", sans-serif;
+}
+
+:root {
+  --background: #f8f8f5;
+  --foreground: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1e230f;
+    --foreground: #f8f8f5;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+}
+
+.fill-1 {
+  font-variation-settings: 'FILL' 1;
+}
