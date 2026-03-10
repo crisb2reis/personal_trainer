@@ -1,6 +1,45 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { Loader2, CheckCircle } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Home() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    nome: "",
+    whatsapp: "",
+    email: ""
+  });
+
+  const TENANT_ID = "660e8400-e29b-41d4-a716-446655440004";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.from('leads').insert({
+        tenant_id: TENANT_ID,
+        name: formData.nome,
+        phone: formData.whatsapp,
+        email: formData.email,
+        status: 'NOVO'
+      });
+
+      if (error) throw error;
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Erro ao salvar lead:', error);
+      alert('Erro ao enviar. Tente novamente.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-x-hidden">
       {/* Header */}
@@ -53,11 +92,11 @@ export default function Home() {
                   <div className="flex -space-x-3">
                     {[1, 2, 3].map((i) => (
                       <div key={i} className="w-12 h-12 rounded-full border-2 border-background-dark overflow-hidden">
-                        <Image 
-                          src={`https://i.pravatar.cc/150?u=${i + 10}`} 
-                          alt="Avatar" 
-                          width={48} 
-                          height={48} 
+                        <Image
+                          src={`https://i.pravatar.cc/150?u=${i + 10}`}
+                          alt="Avatar"
+                          width={48}
+                          height={48}
                           className="object-cover"
                         />
                       </div>
@@ -76,10 +115,10 @@ export default function Home() {
               <div className="relative">
                 <div className="absolute -top-20 -right-20 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
                 <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl aspect-[4/5]">
-                  <Image 
-                    src="/personal_trainer/hero.png" 
-                    alt="Personal Trainer Masculino" 
-                    fill 
+                  <Image
+                    src="/personal_trainer/hero.png"
+                    alt="Personal Trainer Masculino"
+                    fill
                     className="object-cover"
                     priority
                   />
@@ -94,11 +133,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="order-2 lg:order-1 relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
-                <Image 
-                  src="/personal_trainer/about.png" 
-                  alt="Sobre o Personal Trainer" 
-                  fill 
-                    className="object-cover"
+                <Image
+                  src="/personal_trainer/about.png"
+                  alt="Sobre o Personal Trainer"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <div className="order-1 lg:order-2 flex flex-col gap-6">
@@ -157,23 +196,23 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl font-bold text-center mb-16 italic underline decoration-primary underline-offset-8">Transformações Reais</h2>
             <div className="grid md:grid-cols-3 gap-8">
-              <ResultCard 
-                name="Ricardo S." 
-                result="-12kg em 4 meses" 
+              <ResultCard
+                name="Ricardo S."
+                result="-12kg em 4 meses"
                 comment="A metodologia mudou minha relação com o treino. Hoje tenho prazer em me exercitar e bater minhas metas."
                 imageBefore="https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&q=80&w=400"
                 imageAfter="https://images.unsplash.com/photo-1583454110551-21f2fa2ec617?auto=format&fit=crop&q=80&w=400"
               />
-              <ResultCard 
-                name="André M." 
-                result="+8kg de Massa" 
+              <ResultCard
+                name="André M."
+                result="+8kg de Massa"
                 comment="Sempre tive dificuldade em ganhar peso. O plano de hipertrofia focado em carga foi cirúrgico e eficiente."
                 imageBefore="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
                 imageAfter="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=400"
               />
-              <ResultCard 
-                name="Carlos T." 
-                result="Foco em Performance" 
+              <ResultCard
+                name="Carlos T."
+                result="Foco em Performance"
                 comment="Melhorei meus tempos na corrida e acabei com as dores que me limitavam. Outro nível de vida."
                 imageBefore="https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&q=80&w=400"
                 imageAfter="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=400"
@@ -190,21 +229,21 @@ export default function Home() {
               <p className="text-slate-400">Temos o plano ideal para a sua rotina e objetivos específicos.</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
-              <ServiceCard 
-                 title="Presencial" 
-                 desc="Acompanhamento de perto em academia ou condomínio. Correção instantânea de movimentos."
-                 features={["Foco total na execução", "Material incluso", "Periodização presencial"]}
+              <ServiceCard
+                title="Presencial"
+                desc="Acompanhamento de perto em academia ou condomínio. Correção instantânea de movimentos."
+                features={["Foco total na execução", "Material incluso", "Periodização presencial"]}
               />
-              <ServiceCard 
-                 title="Online (Personal)" 
-                 desc="Treino ao vivo via vídeo-chamada. Onde você estiver, com a mesma qualidade do presencial."
-                 features={["Liberdade geográfica", "Gravação das aulas", "Correção via vídeo"]}
-                 popular
+              <ServiceCard
+                title="Online (Personal)"
+                desc="Treino ao vivo via vídeo-chamada. Onde você estiver, com a mesma qualidade do presencial."
+                features={["Liberdade geográfica", "Gravação das aulas", "Correção via vídeo"]}
+                popular
               />
-              <ServiceCard 
-                 title="Consultoria" 
-                 desc="Planilha de treinos personalizada via App + suporte via WhatsApp para tirar dúvidas."
-                 features={["Treine no seu horário", "App exclusivo", "Feedback semanal"]}
+              <ServiceCard
+                title="Consultoria"
+                desc="Planilha de treinos personalizada via App + suporte via WhatsApp para tirar dúvidas."
+                features={["Treine no seu horário", "App exclusivo", "Feedback semanal"]}
               />
             </div>
           </div>
@@ -222,9 +261,75 @@ export default function Home() {
                 <CTAListItem icon="calendar_today" text="Planejamento de rotina" />
                 <CTAListItem icon="check_circle" text="Sem compromisso inicial" />
               </div>
-              <button className="bg-primary text-background-dark px-12 py-5 rounded-2xl text-2xl font-black hover:scale-105 transition-all shadow-2xl shadow-primary/40 uppercase tracking-tighter cursor-pointer">
-                Quero começar agora
-              </button>
+              <div className="max-w-xl mx-auto">
+                {isSubmitted ? (
+                  <div className="text-center py-8">
+                    <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle className="w-10 h-10 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4 text-white">Solicitação Enviada!</h3>
+                    <p className="text-slate-400 mb-8">Entraremos em contato em breve para sua avaliação.</p>
+                    <button
+                      onClick={() => setIsSubmitted(false)}
+                      className="text-primary font-bold hover:underline"
+                    >
+                      Enviar outra solicitação
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                    <div>
+                      <label className="block text-sm font-bold mb-2 text-slate-300">Nome Completo</label>
+                      <input
+                        required
+                        value={formData.nome}
+                        onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-primary focus:border-primary"
+                        placeholder="Seu nome"
+                        type="text"
+                      />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold mb-2 text-slate-300">WhatsApp</label>
+                        <input
+                          required
+                          value={formData.whatsapp}
+                          onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-primary focus:border-primary"
+                          placeholder="(00) 00000-0000"
+                          type="tel"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold mb-2 text-slate-300">Email</label>
+                        <input
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-primary focus:border-primary"
+                          placeholder="seu@email.com"
+                          type="email"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      disabled={isLoading}
+                      className="w-full py-5 bg-primary text-background-dark text-xl font-black rounded-2xl shadow-2xl shadow-primary/40 uppercase tracking-tighter hover:scale-105 transition-all flex items-center justify-center gap-2"
+                      type="submit"
+                    >
+                      {isLoading ? (
+                        <>
+                          Enviando...
+                          <Loader2 className="w-6 h-6 animate-spin" />
+                        </>
+                      ) : (
+                        "Quero começar agora"
+                      )}
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           </div>
         </section>
@@ -234,15 +339,15 @@ export default function Home() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl font-bold text-center mb-12">Dúvidas Frequentes</h2>
             <div className="space-y-4">
-              <FAQItem 
+              <FAQItem
                 question="Preciso já estar treinando para começar?"
                 answer="Absolutamente não! Atendo desde iniciantes que nunca pisaram numa academia até atletas de alto rendimento. O plano é adaptado ao seu nível atual."
               />
-              <FAQItem 
+              <FAQItem
                 question="Como funciona o acompanhamento online?"
                 answer="Fazemos chamadas de vídeo em tempo real onde eu acompanho toda a sua execução, cronometro os intervalos e te motivo como se estivéssemos lado a lado."
               />
-              <FAQItem 
+              <FAQItem
                 question="Quanto tempo demora para ver resultados?"
                 answer="Nas primeiras 4 semanas você já sentirá melhora na disposição e sono. Resultados estéticos visíveis costumam aparecer entre 8 e 12 semanas de consistência."
               />
@@ -260,8 +365,8 @@ export default function Home() {
               <h2 className="text-lg font-bold tracking-tight text-white">PRO<span className="text-primary">TRAINER</span></h2>
             </div>
             <div className="flex gap-6">
-               <span className="text-slate-500 hover:text-primary transition-colors cursor-pointer">Instagram</span>
-               <span className="text-slate-500 hover:text-primary transition-colors cursor-pointer">WhatsApp</span>
+              <span className="text-slate-500 hover:text-primary transition-colors cursor-pointer">Instagram</span>
+              <span className="text-slate-500 hover:text-primary transition-colors cursor-pointer">WhatsApp</span>
             </div>
             <div className="text-sm text-slate-500">
               © 2024 ProTrainer. Todos os direitos reservados.
